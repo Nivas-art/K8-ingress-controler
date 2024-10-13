@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1
+  labels:
+    project: for-deploy
+    env: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      project: for-deploy
+      env: dev
+  template:
+    metadata:
+      name: app1
+      labels:
+        app: nginx
+        project: for-deploy
+        env: dev
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1
+spec:
+  selector:
+    app: nginx
+    project: for-deploy
+    env: dev
+  ports:
+  - name: app1
+    protocol: TCP
+    port: 80 
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1
+spec:
+  rules:
+  - host: "app1.devops-srinu.online"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: app1
+            port:
+              number: 80
