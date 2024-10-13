@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx
+        image: munaga123/app1:1.0
 ---
 apiVersion: v1
 kind: Service
